@@ -12,4 +12,7 @@ kubectl apply -f kube/pyfile.yaml
 # apply the outputkey config map
 kubectl apply -f kube/outputkey.yaml
 
+# apply deployment file
+kubectl apply -f kube/deployment.yaml
+
 
