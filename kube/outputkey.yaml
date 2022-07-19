@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  REDIS_OUTPUT_KEY: luizcouto-proj3-output
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: outputkey

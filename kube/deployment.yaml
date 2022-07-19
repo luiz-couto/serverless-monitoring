@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: serverless-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: serverless-redis
+  template:
+    metadata:
+      labels:
+        app: serverless-redis
+    spec:
+      containers:
+      - name: serverless-redis
+        image: lucasmsp/serverless:redis
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 100m
+            memory: 300Mi
+        volumeMounts:
+        - name: pyfile
+          mountPath: "/opt/usermodule.py"
+          subPath: "pyfile"
+        env:
+        - name: REDIS_HOST
+          value: "192.168.121.189"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: REDIS_INPUT_KEY
+          value: "metrics"
+        - name: REDIS_OUTPUT_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: outputkey
+              key: REDIS_OUTPUT_KEY
+      volumes:
+      - name: pyfile
+        configMap:
+          name: pyfile

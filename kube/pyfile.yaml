@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  pyfile: "from typing import Dict, Any\n\ndef handler(data: dict, context: object)
+    -> Dict[str, Any]:\n    print(\"DATA:\", data)\n    print(\"CONTEXT:\", context)\n
+    \   \n    return {\n        \"test\": \"my awesome test\"\n    }\n"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: pyfile
