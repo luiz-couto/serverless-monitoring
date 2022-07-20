@@ -30,7 +30,7 @@ app.layout = html.Div([
         dcc.Interval(id='interval2', interval=3*1000, n_intervals=0)
     ]),
     html.Div([
-        html.H4(children='Memory Utilization', style={'fontSize':'27px'}),
+        html.H4(children='Memory Average Utilization by Minute', style={'fontSize':'27px'}),
         dcc.Graph(id='memory-percent'),
         dcc.Interval(id='interval1', interval=3*1000, n_intervals=0)
     ])
@@ -70,7 +70,7 @@ def build_cpu_dashboard(n):
                                     col=1)
     
     
-    figs.update_xaxes(title_text = 'Time')
+    figs.update_xaxes(title_text = 'Time (s)')
     figs.update_yaxes(title_text = 'Utilization (%)')
     
     figs.update_layout(
@@ -114,7 +114,7 @@ def build_cpu_dashboard(n):
                                     col=1 )
     
     
-    figs.update_xaxes(title_text = 'Time')
+    figs.update_xaxes(title_text = 'Time (s)')
     figs.update_yaxes(title_text = 'Utilization (%)')
     
     figs.update_layout(
