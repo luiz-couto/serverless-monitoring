@@ -1,0 +1,13 @@
+plotly
+dash
+redis
+dash_bootstrap_components
+hvplot
+param 
+panel
+datashader
+numpy
+pandas
+scikit-learn
+icecream==2.1.2
+

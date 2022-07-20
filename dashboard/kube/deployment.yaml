@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monitoring-dashboard
+  template:
+    metadata:
+      labels:
+        app: monitoring-dashboard
+    spec:
+      containers:
+      - name: monitoring-dashboard
+        image: ghcr.io/luiz-couto/monitoring-dashboard:v0.0.1
+        ports:
+        - containerPort: 5021
