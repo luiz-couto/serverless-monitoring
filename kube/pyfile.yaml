@@ -1,8 +1,33 @@
 apiVersion: v1
 data:
-  pyfile: "from typing import Dict, Any\n\ndef handler(data: dict, context: object)
-    -> Dict[str, Any]:\n    print(\"DATA:\", data)\n    print(\"CONTEXT:\", context)\n
-    \   \n    return {\n        \"test\": \"my awesome test\"\n    }\n"
+  pyfile: "from typing import Dict, Any\n\nN_MIN = 12\nN_HOUR = 720\n\ndef getCPUandMemory(data:
+    dict):\n    cpus_percent = []\n    memory_percent = 0\n    for key in data.keys():\n
+    \       if \"cpu_percent\" in key:\n            cpus_percent.append(data[key])\n
+    \       \n        if \"virtual_memory-percent\" in key:\n            memory_percent
+    = data[key]\n\n    return cpus_percent, memory_percent\n\n\ndef handler(data:
+    dict, context: object) -> Dict[str, Any]:\n    \n    cpus_percent, memory_percent
+    = getCPUandMemory(data)\n    output = {}\n\n    if getattr(context.env, \"counter\",
+    None) is None:\n        context.env[\"counter\"] = 1\n        for idx, cpu in
+    enumerate(cpus_percent):\n            label_min = \"mvg_avg_cpu_\" + str(idx)
+    + \"_last_minute\"\n            context.env[label_min] = cpu\n            output[label_min]
+    = cpu\n\n            label_hour = \"mvg_avg_cpu_\" + str(idx) + \"_last_hour\"\n
+    \           context.env[label_hour] = cpu\n            output[label_hour] = cpu\n\n
+    \       label_memory = \"mvg_avg_memory_last_min\" \n        context.env[label_memory]
+    = memory_percent\n        output[label_memory]\n\n        return output\n\n    \n
+    \   context.env[\"counter\"] += 1\n    counter = context.env[\"counter\"]\n\n
+    \   n_min = N_MIN\n    n_hour = N_HOUR\n\n    if counter < N_MIN:\n        n_min
+    = counter\n    \n    if counter < N_HOUR:\n        n_hour = counter\n\n\n    for
+    idx, cpu in enumerate(cpus_percent):\n        label_min = \"mvg_avg_cpu_\" + str(idx)
+    + \"_last_minute\"\n        last_mvg_avg_min = context.env[label_min]\n        new_mvg_avg_min
+    = (last_mvg_avg_min * (n_min - 1) + cpu) / n_min\n        context.env[label_min]
+    = new_mvg_avg_min\n        output[label_min] = new_mvg_avg_min\n\n        label_hour
+    = \"mvg_avg_cpu_\" + str(idx) + \"_last_hour\"\n        last_mvg_avg_hour = context.env[label_hour]\n
+    \       new_mvg_avg_hour = (last_mvg_avg_hour * (n_hour - 1) + cpu) / n_hour\n
+    \       context.env[label_hour] = new_mvg_avg_hour\n        output[label_hour]
+    = new_mvg_avg_hour\n\n    label_memory = \"mvg_avg_memory_last_min\"\n    last_mvg_avg_memory
+    = context.env[label_memory]\n    new_mvg_avg_memory = (last_mvg_avg_memory * (n_min
+    - 1) + cpu) / n_min\n    context.env[label_memory] = new_mvg_avg_memory\n    output[label_memory]
+    = new_mvg_avg_memory\n\n    print(output)\n    return output\n"
 kind: ConfigMap
 metadata:
   creationTimestamp: null
