@@ -44,7 +44,7 @@ def build_cpu_dashboard(n):
     hours = []
     cpus = 0
 
-    for i in range(len(app.cpu_data) - 1):
+    for i in range(16):
         cpus = cpus + 1
 
         minutes.append(app.cpu_data["mvg_avg_cpu_" + str(i) + "_last_minute"])
