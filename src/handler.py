@@ -22,7 +22,10 @@ def handler(data: dict, context: object) -> Dict[str, Any]:
     output = {}
 
     if getattr(context.env, "counter", None) is None:
+        
         context.env["counter"] = 1
+        print("PASSOU AQ:", context.env["counter"])
+        
         for idx, cpu in enumerate(cpus_percent):
             label_min = "mvg_avg_cpu_" + str(idx) + "_last_minute"
             context.env[label_min] = cpu
