@@ -24,17 +24,17 @@ get_redis_data()
 
 app.layout = html.Div([
     html.Div([
-        html.H4(children='CPUs Average Utilization by Minute', style={'fontSize':'40px'}),
+        html.H4(children='CPUs Average Utilization by Minute', style={'fontSize':'27px'}),
         dcc.Graph(id='cpus_min'),
         dcc.Interval(id='interval0', interval=3*1000, n_intervals=0)
     ]),
     html.Div([
-        html.H4(children='CPUs Average Utilization by Hour', style={'fontSize':'40px'}),
+        html.H4(children='CPUs Average Utilization by Hour', style={'fontSize':'27px'}),
         dcc.Graph(id='cpus_hour'),
         dcc.Interval(id='interval2', interval=3*1000, n_intervals=0)
     ]),
     html.Div([
-        html.H4(children='Memory Utilization', style={'fontSize':'40px'}),
+        html.H4(children='Memory Utilization', style={'fontSize':'27px'}),
         dcc.Graph(id='memory-percent'),
         dcc.Interval(id='interval1', interval=3*1000, n_intervals=0)
     ])
@@ -74,8 +74,8 @@ def build_cpu_dashboard(n):
     figs.update_yaxes(title_text = 'Utilization (%)')
     
     figs.update_layout(
-        width = 880,
-        height = 600
+        width = 1200,
+        height = 300
     )
     
     return figs
@@ -112,8 +112,8 @@ def build_cpu_dashboard(n):
     figs.update_yaxes(title_text = 'Utilization (%)')
     
     figs.update_layout(
-        width = 2000,
-        height = 600
+        width = 1200,
+        height = 300
     )
     
     return figs
@@ -140,7 +140,7 @@ def build_vmem_dashboard(n):
     figs.update_yaxes(title_text = 'Utilization (Megabytes)')
 
     figs.update_layout(
-        width = 880,
+        width = 1200,
         height = 300
     )
 
