@@ -81,6 +81,44 @@ def build_cpu_dashboard(n):
     return figs
 
 
+@app.callback(Output('cpus_hour', 'figure'), Input('interval2', 'n_intervals'))
+def build_cpu_dashboard(n):
+    data = json.loads(redis_client.get('luizcouto-proj3-output'))
+    curr_records = []
+
+    for key in data.keys():
+        if "last_hour" in key and "cpu" in key:
+            curr_records.append(data[key])
+
+    app.hour.append(curr_records)
+
+    if len(app.hour) > NUMBER_RECORDS:
+        app.hour = app.hour[-NUMBER_RECORDS:]
+
+
+    figs = make_subplots(
+        rows = 1,
+        cols = 1,
+        subplot_titles = (
+            "",
+        ),
+    )
+    
+    for i in range(len(curr_records)):
+        figs.add_trace(graph.Scatter(x=np.arange(len(app.hour)*len(curr_records)), y=np.array(app.hour)[:,i], name="cpu%d_60sec"%i, mode="lines", line={'color':'rgb(%d,%d,%d)'%((i*73)%255, (i*25) % 255,(i*11) % 255)}), row=1, col=1)
+    
+    
+    figs.update_xaxes(title_text = 'Time')
+    figs.update_yaxes(title_text = 'Utilization (%)')
+    
+    figs.update_layout(
+        width = 2000,
+        height = 600
+    )
+    
+    return figs
+
+
 # https://dash.plotly.com/basic-callbacks
 @app.callback(Output('memory-percent', 'figure'), Input('interval1', 'n_intervals'))
 def build_vmem_dashboard(n):
