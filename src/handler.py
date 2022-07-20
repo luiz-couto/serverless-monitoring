@@ -24,11 +24,11 @@ def handler(data: dict, context: object) -> Dict[str, Any]:
     if getattr(context.env, "counter", None) is None:
         context.env["counter"] = 1
         for idx, cpu in enumerate(cpus_percent):
-            label_min = "mvg_avg_cpu_" + idx + "_last_minute"
+            label_min = "mvg_avg_cpu_" + str(idx) + "_last_minute"
             context.env[label_min] = cpu
             output[label_min] = cpu
 
-            label_hour = "mvg_avg_cpu_" + idx + "_last_hour"
+            label_hour = "mvg_avg_cpu_" + str(idx) + "_last_hour"
             context.env[label_hour] = cpu
             output[label_hour] = cpu
 
@@ -53,13 +53,13 @@ def handler(data: dict, context: object) -> Dict[str, Any]:
 
 
     for idx, cpu in enumerate(cpus_percent):
-        label_min = "mvg_avg_cpu_" + idx + "_last_minute"
+        label_min = "mvg_avg_cpu_" + str(idx) + "_last_minute"
         last_mvg_avg_min = context.env[label_min]
         new_mvg_avg_min = (last_mvg_avg_min * (n_min - 1) + cpu) / n_min
         context.env[label_min] = new_mvg_avg_min
         output[label_min] = new_mvg_avg_min
 
-        label_hour = "mvg_avg_cpu_" + idx + "_last_hour"
+        label_hour = "mvg_avg_cpu_" + str(idx) + "_last_hour"
         last_mvg_avg_hour = context.env[label_hour]
         new_mvg_avg_hour = (last_mvg_avg_hour * (n_hour - 1) + cpu) / n_hour
         context.env[label_hour] = new_mvg_avg_hour
