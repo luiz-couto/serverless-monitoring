@@ -68,7 +68,6 @@ def build_cpu_dashboard(n):
     
     for i in range(len(curr_records)):
         figs.add_trace(graph.Scatter(x=np.arange(len(app.min)*len(curr_records)), y=np.array(app.min)[:,i], name="cpu%d_60sec"%i, mode="lines", line={'color':'rgb(%d,%d,%d)'%((i*73)%255, (i*25) % 255,(i*11) % 255)}), row=1, col=1)
-        figs.add_trace(graph.Scatter(x=np.arange(len(app.hour)*len(curr_records)), y=np.array(app.hour)[:,i], name="cpu%d_60min"%i, mode="lines", line={'color':'rgb(%d,%d,%d)'%((i*73)%255, (i*25) % 255,(i*11) % 255)}), row=2, col=1)
     
     
     figs.update_xaxes(title_text = 'Time')
