@@ -14,9 +14,9 @@ app = Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 redis_client = redis.Redis(host='192.168.121.189', port=6379)
 
-app.min = []
-app.hour = [] 
-app.vmem = []
+app.cpu_min_records = []
+app.cpu_hour_records = [] 
+app.mem_records = []
 
 app.layout = html.Div([
     html.Div([
@@ -46,10 +46,10 @@ def build_cpu_dashboard(n):
         if "last_minute" in key and "cpu" in key:
             curr_records.append(data[key])
 
-    app.min.append(curr_records)
+    app.cpu_min_records.append(curr_records)
 
-    if len(app.min) > NUMBER_RECORDS:
-        app.min = app.min[-NUMBER_RECORDS:]
+    if len(app.cpu_min_records) > NUMBER_RECORDS:
+        app.cpu_min_records = app.cpu_min_records[-NUMBER_RECORDS:]
 
 
     figs = make_subplots(
@@ -61,8 +61,8 @@ def build_cpu_dashboard(n):
     )
     
     for i in range(len(curr_records)):
-        figs.add_trace(graph.Scatter(x=np.arange(len(app.min)*len(curr_records)), 
-                                    y=np.array(app.min)[:,i], 
+        figs.add_trace(graph.Scatter(x=np.arange(len(app.cpu_min_records)*len(curr_records)), 
+                                    y=np.array(app.cpu_min_records)[:,i], 
                                     name="CPU " + str(i), 
                                     mode="lines",
                                     line={'color':'rgb(%d,%d,%d)'%((i*73)%255, (i*25) % 255,(i*11) % 255)}),
@@ -90,10 +90,10 @@ def build_cpu_dashboard(n):
         if "last_hour" in key and "cpu" in key:
             curr_records.append(data[key])
 
-    app.hour.append(curr_records)
+    app.cpu_hour_records.append(curr_records)
 
-    if len(app.hour) > NUMBER_RECORDS:
-        app.hour = app.hour[-NUMBER_RECORDS:]
+    if len(app.cpu_hour_records) > NUMBER_RECORDS:
+        app.cpu_hour_records = app.cpu_hour_records[-NUMBER_RECORDS:]
 
 
     figs = make_subplots(
@@ -105,8 +105,8 @@ def build_cpu_dashboard(n):
     )
     
     for i in range(len(curr_records)):
-        figs.add_trace(graph.Scatter(x=np.arange(len(app.hour)*len(curr_records)),
-                                    y=np.array(app.hour)[:,i], 
+        figs.add_trace(graph.Scatter(x=np.arange(len(app.cpu_hour_records)*len(curr_records)),
+                                    y=np.array(app.cpu_hour_records)[:,i], 
                                     name="CPU " + str(i),
                                     mode="lines",
                                     line={'color':'rgb(%d,%d,%d)'%((i*73)%255, (i*25) % 255,(i*11) % 255)}),
@@ -128,10 +128,10 @@ def build_cpu_dashboard(n):
 @app.callback(Output('memory-percent', 'figure'), Input('interval1', 'n_intervals'))
 def build_vmem_dashboard(n):
     data = json.loads(redis_client.get('luizcouto-proj3-output'))
-    app.vmem.append(data['mvg_avg_memory_last_min'])
+    app.mem_records.append(data['mvg_avg_memory_last_min'])
 
-    if len(app.vmem) > NUMBER_RECORDS:
-        app.vmem = app.vmem[-NUMBER_RECORDS:]
+    if len(app.mem_records) > NUMBER_RECORDS:
+        app.mem_records = app.mem_records[-NUMBER_RECORDS:]
     
     figs = make_subplots(
         rows = 1,
@@ -139,11 +139,11 @@ def build_vmem_dashboard(n):
         subplot_titles = ("")
     )
 
-    figs.add_trace(graph.Scatter(x=np.arange(len(app.vmem)),
-                                y=np.array(app.vmem),
+    figs.add_trace(graph.Scatter(x=np.arange(len(app.mem_records)),
+                                y=np.array(app.mem_records),
                                 name="memory_percent_last_min",
                                 mode="lines",
-                                line={'color':'rgb(255,255,0)'}),
+                                line={'color':'rgb(235,5,100)'}),
                                 row=1,
                                 col=1 )
 
