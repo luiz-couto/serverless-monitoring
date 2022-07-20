@@ -16,4 +16,4 @@ spec:
       - name: monitoring-dashboard
         image: ghcr.io/luiz-couto/monitoring-dashboard:v0.0.1
         ports:
-        - containerPort: 5021
+        - containerPort: 5121

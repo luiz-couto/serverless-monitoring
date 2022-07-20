@@ -4,6 +4,6 @@ COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 COPY . .
 
-EXPOSE 5021
+EXPOSE 5121
 
-CMD ["python", "dashboard.py", "--host", "0.0.0.0","--port=5021"]
+CMD ["python", "dashboard.py", "--host", "0.0.0.0","--port=5121"]

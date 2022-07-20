@@ -7,5 +7,5 @@ spec:
     app: monitoring-dashboard
   ports:
     - protocol: TCP
-      port: 5021
-      targetPort: 5021
+      port: 5121
+      targetPort: 5121
