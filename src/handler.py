@@ -17,6 +17,8 @@ def getCPUandMemory(data: dict):
 
 
 def handler(data: dict, context: object) -> Dict[str, Any]:
+
+    print("UUHUUULL")
     
     cpus_percent, memory_percent = getCPUandMemory(data)
     output = {}
