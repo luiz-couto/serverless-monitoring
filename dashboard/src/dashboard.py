@@ -7,6 +7,8 @@ import plotly.graph_objects as graph
 from plotly.subplots import make_subplots
 from dash.dependencies import Input, Output
 
+NUMBER_RECORDS = 100
+
 app = Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 redis_client = redis.Redis(host='192.168.121.189', port=6379)
@@ -22,9 +24,14 @@ get_redis_data()
 
 app.layout = html.Div([
     html.Div([
-        html.H4(children='CPUs Utilization', style={'fontSize':'40px'}),
-        dcc.Graph(id='cpus'),
+        html.H4(children='CPUs Average Utilization by Minute', style={'fontSize':'40px'}),
+        dcc.Graph(id='cpus_min'),
         dcc.Interval(id='interval0', interval=3*1000, n_intervals=0)
+    ]),
+    html.Div([
+        html.H4(children='CPUs Average Utilization by Hour', style={'fontSize':'40px'}),
+        dcc.Graph(id='cpus_hour'),
+        dcc.Interval(id='interval2', interval=3*1000, n_intervals=0)
     ]),
     html.Div([
         html.H4(children='Memory Utilization', style={'fontSize':'40px'}),
@@ -36,42 +43,32 @@ app.layout = html.Div([
 
 
 # https://dash.plotly.com/basic-callbacks
-@app.callback(Output('cpus', 'figure'), Input('interval0', 'n_intervals'))
+@app.callback(Output('cpus_min', 'figure'), Input('interval0', 'n_intervals'))
 def build_cpu_dashboard(n):
-    get_redis_data()
-    
-    minutes = []
-    hours = []
-    cpus = 0
+    data = json.loads(redis_client.get('luizcouto-proj3-output'))
+    curr_records = []
 
-    for i in range(16):
-        cpus = cpus + 1
+    for key in data.keys():
+        if "last_minute" in key and "cpu" in key:
+            curr_records.append(data[key])
 
-        minutes.append(app.cpu_data["mvg_avg_cpu_" + str(i) + "_last_minute"])
-        hours.append(app.cpu_data["mvg_avg_cpu_" + str(i) + "_last_hour"])
-    
-    app.min.append(minutes)
-    app.hour.append(hours)
+    app.min.append(curr_records)
 
-    
-    if len(app.min) > 300:
-        app.min = app.min[-300:]
-        app.hour = app.hour[-300:]
+    if len(app.min) > NUMBER_RECORDS:
+        app.min = app.min[-NUMBER_RECORDS:]
 
 
     figs = make_subplots(
-        rows = 3,
+        rows = 1,
         cols = 1,
         subplot_titles = (
-            "CPU Utilization(60 seconds)",
-            "CPU Utilization(60 minutes)",
+            "",
         ),
-        shared_xaxes=True
     )
     
-    for i in range(cpus):
-        figs.add_trace(graph.Scatter(x=np.arange(len(app.min)*cpus), y=np.array(app.min)[:,i], name="cpu%d_60sec"%i, mode="lines", line={'color':'rgb(%d,%d,%d)'%((i*73)%255, (i*25) % 255,(i*11) % 255)}), row=1, col=1)
-        figs.add_trace(graph.Scatter(x=np.arange(len(app.hour)*cpus), y=np.array(app.hour)[:,i], name="cpu%d_60min"%i, mode="lines", line={'color':'rgb(%d,%d,%d)'%((i*73)%255, (i*25) % 255,(i*11) % 255)}), row=2, col=1)
+    for i in range(len(curr_records)):
+        figs.add_trace(graph.Scatter(x=np.arange(len(app.min)*len(curr_records)), y=np.array(app.min)[:,i], name="cpu%d_60sec"%i, mode="lines", line={'color':'rgb(%d,%d,%d)'%((i*73)%255, (i*25) % 255,(i*11) % 255)}), row=1, col=1)
+        figs.add_trace(graph.Scatter(x=np.arange(len(app.hour)*len(curr_records)), y=np.array(app.hour)[:,i], name="cpu%d_60min"%i, mode="lines", line={'color':'rgb(%d,%d,%d)'%((i*73)%255, (i*25) % 255,(i*11) % 255)}), row=2, col=1)
     
     
     figs.update_xaxes(title_text = 'Time')
