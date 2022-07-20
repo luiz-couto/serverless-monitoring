@@ -34,7 +34,7 @@ def handler(data: dict, context: object) -> Dict[str, Any]:
 
         label_memory = "mvg_avg_memory_last_min" 
         context.env[label_memory] = memory_percent
-        output[label_memory]
+        output[label_memory] = memory_percent
 
         return output
 
