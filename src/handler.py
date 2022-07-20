@@ -76,5 +76,5 @@ def handler(data: dict, context: object) -> Dict[str, Any]:
     context.env[label_memory] = new_mvg_avg_memory
     output[label_memory] = new_mvg_avg_memory
 
-    print(output)
+    raise Exception(output)
     return output
