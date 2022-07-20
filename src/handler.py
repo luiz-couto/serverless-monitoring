@@ -1,25 +1,23 @@
 from typing import Dict, Any
 
-N_MIN = 12
-N_HOUR = 720
-
-def getCPUandMemory(data: dict):
-    cpus_percent = []
-    memory_percent = 0
-    for key in data.keys():
-        if "cpu_percent" in key:
-            cpus_percent.append(data[key])
-        
-        if "virtual_memory-percent" in key:
-            memory_percent = data[key]
-
-    return cpus_percent, memory_percent
-
-
 def handler(data: dict, context: object) -> Dict[str, Any]:
-
-    print("UUHUUULL")
     
+    N_MIN = 12
+    N_HOUR = 720
+
+    def getCPUandMemory(data: dict):
+        cpus_percent = []
+        memory_percent = 0
+        for key in data.keys():
+            if "cpu_percent" in key:
+                cpus_percent.append(data[key])
+            
+            if "virtual_memory-percent" in key:
+                memory_percent = data[key]
+
+        return cpus_percent, memory_percent
+    
+
     cpus_percent, memory_percent = getCPUandMemory(data)
     output = {}
 
@@ -76,5 +74,4 @@ def handler(data: dict, context: object) -> Dict[str, Any]:
     context.env[label_memory] = new_mvg_avg_memory
     output[label_memory] = new_mvg_avg_memory
 
-    raise Exception(output)
     return output
