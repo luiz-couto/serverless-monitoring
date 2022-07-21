@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: redis-runtime
-        image: ghcr.io/luiz-couto/redis-runtime:v0.0.1 
+        image: ghcr.io/luiz-couto/redis-runtime:v0.0.2
         imagePullPolicy: Always
         resources:
           requests:

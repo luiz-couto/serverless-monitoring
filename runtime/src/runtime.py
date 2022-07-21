@@ -75,3 +75,5 @@ def main():
         
         time.sleep(SLEEP_TIME)
 
+if __name__ == '__main__':
+    main()
