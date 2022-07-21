@@ -2,19 +2,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: serverless-redis
+  name: redis-runtime
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: serverless-redis
+      app: redis-runtime
   template:
     metadata:
       labels:
-        app: serverless-redis
+        app: redis-runtime
     spec:
       containers:
-      - name: serverless-redis
+      - name: redis-runtime
         image: ghcr.io/luiz-couto/redis-runtime:v0.0.1 
         imagePullPolicy: Always
         resources:
