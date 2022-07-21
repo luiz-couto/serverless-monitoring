@@ -9,5 +9,3 @@ datashader
 numpy
 pandas
 scikit-learn
-icecream==2.1.2
-
